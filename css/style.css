@@ -1,0 +1,431 @@
+/*
+Site Colors:
+#EB7449
+#FFFEF2
+#66A9D3
+#3B6F9F
+#383F49
+ */
+
+body {
+  /* background-color: #E9ECEF; */
+  background-color: #FFFEF2;
+}
+
+.border-secondary-color {
+  border-color: #EB7449;
+}
+
+/* nav, footer {
+  background-color: #FDFDF0;
+  color: #383F49;
+} */
+.nav-border {
+  border-bottom: 4px solid #EB7449;
+}
+
+.jumbotron {
+  border-radius: 0;
+  background-image: url(../images/reverie.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 77vh;
+  min-height: 500px;
+  /* background-image: linear-gradient(-45deg, #FF0000, #0000FF); */
+  /* clip-path: polygon(0 0, 100% 0, 100% 90%, 50% 100%, 0 90%); */
+}
+
+.jumbotron div {
+  position: relative;
+  top: 15%;
+  color: #FFFEF2;
+  /* left: 30%; */
+  /* background-color: #FFFEF2; */
+}
+
+.jumbotron div h1, .jumbotron div h3, .jumbotron div div {
+  margin-right: 0;
+  text-align: right;
+}
+
+.jumbotron div div {
+  float: right;
+  width: 40%;
+}
+
+.landing-text {
+  color: #FFFEF2;
+  border-top: 2px solid #EB7449;
+  border-bottom: 2px solid #EB7449;
+  margin-top: 3%;
+}
+
+.landing-text a {
+  border: 2px solid #FFFEF2;
+  color: #FFFEF2;
+}
+
+.landing-text a:hover {
+  background-color: #FFFEF2;
+  color: #EB7449;
+}
+
+.landing-text .row div {
+  text-align: center;
+}
+
+.project-even-panel {
+  background-image: none;
+  background-color: transparent;
+}
+
+.project-font {
+  font-family: 'Hind Siliguri', sans-serif;
+}
+
+.navbar-brand img {
+  height: 80px;
+  width: 80px;
+}
+
+/* index.html page specific properties */
+.display-4, .display-6 {
+  text-align: center;
+}
+
+.display-4 {
+  text-decoration: underline;
+}
+
+#headshot {
+  border-radius: 10%;
+  border: 5px solid #EB7449;
+  margin: 2em 2em 5em 2em;
+  width: 70%;
+  height: auto;
+  min-width: 200px;
+  min-height: 200px;
+}
+
+.lead {
+  font-weight: bold;
+  line-height: 1.2em;
+  margin-bottom: 2em;
+}
+
+.btn {
+   width: 50%;
+   margin: 5px;
+   border-color: #EB7449;
+   color: #EB7449;
+}
+
+.button-group {
+  margin-top: 30%;
+}
+/* end of index.html page specific properties */
+
+/* Biography panel section */
+#bioText {
+  margin-top: 30%;
+  font-size: 20px;
+}
+/* End of Biography panel section */
+
+.size {
+  height: 30vh;
+  border-radius: 10%;
+  background-size: cover;
+  background-position: center;
+  transition-property: height, width;
+  transition-duration: 1s;
+}
+
+.size:hover {
+  height: 50vh;
+  widht: auto;
+}
+
+.details-center {
+  text-align: center;
+  line-height: 1.2em;
+}
+
+#portfolioMain row {
+  margin-top: 5%;
+  margin-bottom: 5%;
+}
+
+.project-fontsize-md {
+  font-size: 18px;
+}
+
+.project-fontsize-lg {
+  font-size: 24px;
+}
+
+.btn-cursor {
+  transition-duration: 0.2s;
+  transition-property: text-shadow, font-size;
+}
+
+.btn-cursor:hover {
+  text-shadow: 3px -3px 3px #EB7449;
+  font-size: 120%;
+  cursor: pointer;
+}
+
+.currentList {
+  color: #EB7449;
+  font-weight: bold;
+}
+
+#gallery {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.gallery-item {
+  width: 30%;
+  max-width: 250px;
+  /* height: 300px; */
+  margin-bottom: 2em;
+  border: 1px solid #66A9D3;
+  border-radius: 3%;
+  padding: 10px;
+}
+
+.image-container {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-bottom: 1em;
+}
+
+.image-container:hover {
+  cursor: pointer;
+  filter: opacity(0.8);
+}
+
+iframe {
+  border-radius: 0.25em;
+}
+
+.calendar-container header {
+  padding-top: 10px;
+}
+
+/* Contact Page */
+#contactImg {
+  background-image: url(../images/headshot.jpg);
+  background-size: cover;
+  background-position: center;
+  border-radius: 10%;
+  border: 2px solid #EB7449;
+  display: block;
+  height: 40vh;
+  width: 90%;
+}
+
+.contact-main {
+  background-image: linear-gradient(45deg, #FFFEF2, #3B6F9F);
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+.contact-main::after {
+  display: block;
+  clear: both;
+}
+
+#contactForm button {
+  color: #FFFEF2;
+  border: none;
+}
+
+.ftr-pos {
+  text-align: center;
+  padding: 2em;
+}
+
+.footer-border {
+  border-top: 4px solid #EB7449;
+}
+
+/* Modal Styling */
+
+.full {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* .modal-content {
+  width: 80%;
+  height: 80%;
+  margin: 3% auto;
+  background-color: #FFFEF2;
+  z-index: 200;
+} */
+
+.modal-btn {
+  font-size: 50px;
+  color: #EB7449;
+  font-weight: bold;
+}
+
+.modal-btn:hover {
+  cursor: pointer;
+  filter: opacity(0.8);
+}
+
+#modalClose {
+  position: relative;
+  top: 3%;
+  left: 96%;
+}
+
+#modalImage {
+  display: block;
+  /* border: 1px solid #EB7449; */
+  border-radius: 2%;
+  height: auto;
+  width: auto;
+  max-height: 70%;
+  max-width: 80%;
+  margin: auto;
+}
+
+.modal-details {
+  width: 40%;
+  margin: auto;
+  margin-top: 1em;
+  text-align: center;
+  color: #FFFEF2;
+}
+
+#previous, #next {
+  position: fixed;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: multiply;
+  height: 50px;
+  width: 50px;
+  border: none;
+}
+
+#previous {
+  background-image: url(../images/icons/previous.png);
+  left: 2%;
+  top: 45%;
+}
+
+#next {
+  background-image: url(../images/icons/next.png);
+  top: 45%;
+  right: 2%;
+}
+
+@media only screen and (max-width: 720px) {
+
+  #landing-main .col-6 {
+    min-width: 200px;
+    display: block;
+  }
+
+  #landing-main a {
+    width: 90%;
+  }
+
+  .project-fontsize-md{
+    font-size: 12px;
+  }
+
+  h1, .display-4 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3, .project-fontsize-lg {
+    font-size: 16px;
+  }
+
+  #gallery {
+    display: block;
+  }
+
+  #modalImage {
+    max-width: 70%;
+  }
+
+  #previous, #next {
+    height: 30px;
+    width: 30px;
+  }
+
+  #modalClose {
+    position: relative;
+    top: 3%;
+    left: 90%;
+  }
+
+  .gallery-item, .contact-main .col-4, .contact-main .col-8 {
+    width: 90%;
+    margin: 10px auto;
+    height: auto;
+    max-width: none;
+  }
+
+  .gallery-item {
+    max-height: 475px;
+  }
+
+  .col-8 {
+    max-height: 550px;
+  }
+
+  .contact-main form {
+    display: block;
+  }
+
+  .row {
+    display: block;
+  }
+
+  .col-2 {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #66A9D3;
+    margin-bottom: 10px;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+
+  #landing-main .col-6, {
+    width: 80%;
+    margin: auto;
+  }
+
+  .col-10, .col-2 {
+    width: 100%;
+    max-width: 100%;
+    margin: auto;
+  }
+
+  .col-10 {
+    padding-top: 30px;
+  }
+}
