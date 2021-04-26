@@ -144,7 +144,7 @@ body {
 
 .size:hover {
   height: 50vh;
-  widht: auto;
+  width: auto;
 }
 
 .details-center {
@@ -414,7 +414,7 @@ iframe {
 
 @media only screen and (max-width: 420px) {
 
-  #landing-main .col-6, {
+  #landing-main .col-6 {
     width: 80%;
     margin: auto;
   }
