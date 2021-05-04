@@ -1,18 +1,11 @@
 <?php
 
-/**
- * Manages the table employee in the database
- * 
- * Purpose: INFO5094 LAMP 2 Group Project - W21
- * Author:  Group 1
- */
-
 declare(strict_types=1);    // Sets as strict types
 
 namespace Database {
 	require_once("interface.php");
 
-	class Employee implements IRepository
+	class Painting implements IRepository
 	{
 		function __construct($dbc)
 		{
@@ -21,16 +14,16 @@ namespace Database {
 		}
 
 		/**
-		 * Gets all employees from the database ordered by name
+		 * Gets all paintings from the database ordered by id
 		 *
-		 * @return array [id, sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek]
+		 * @return array [id, name, dimensions, medium, medium_fr, location, status, date_added]
 		 */
 		function get(): array
 		{
 			$query = "
-				SELECT id, sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek
-				FROM tb_Employee 
-				ORDER BY sSurname, sGivenName
+				SELECT id, name, dimensions, medium, medium_fr, location, status, date_added
+				FROM paintings 
+				ORDER BY id
 			";
 			$stmt = $this->pdo->query($query);
 
@@ -43,18 +36,18 @@ namespace Database {
 		}
 
 		/**
-		 * Gets one employee from the database ordered by name
+		 * Gets one painting from the database ordered by id
 		 *
-		 * @param int $employeeId
-		 * @return object [id, sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek]
+		 * @param int $paintingId
+		 * @return array [id, name, dimensions, medium, medium_fr, location, status, date_added]
 		 */
-		function getOne(int $employeeId): array
+		function getOne(int $paintingId): array
 		{
 			$query = "
-				SELECT id, sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek
-				FROM tb_Employee 
+				SELECT id, name, dimensions, medium, medium_fr, location, status, date_added
+				FROM paintings 
 				WHERE id = :id
-				ORDER BY sSurname, sGivenName
+				ORDER BY id
 			";
 			$stmt = $this->pdo->prepare($query);
 			$stmt->execute(['id' => $employeeId]);
@@ -68,37 +61,31 @@ namespace Database {
 		}
 
 		/**
-		 * Adds a new employee to the database
+		 * Adds a new painting to the database
 		 *
-		 * @param string $sSurname
-		 * @param string $sGivenName
-		 * @param string $sMiddleName
-		 * @param string $dtBirth
-		 * @param string $sGender
-		 * @param string $dtHire
-		 * @param string $iInitialLevel
-		 * @param string $sPeriodTime
-		 * @param string $iPTHoursWeek
+		 * @param string $name
+		 * @param string $dimensions
+		 * @param string $medium
+		 * @param string $medium_fr
+		 * @param string $location
+		 * @param string $status
 		 * @return bool Returns FALSE on failure 
 		 */
-		function insert(string $sSurname, string $sGivenName, string $sMiddleName, string $dtBirth, string $sGender, string $dtHire, string $iInitialLevel, string $sPeriodTime, string $iPTHoursWeek): bool
+		function insert(string $name, string $dimensions, string $medium, string $medium_fr, string $location, string $status): bool
 		{
 			try {
 				$data = [
-					'sSurname' => $sSurname,
-					'sGivenName' => $sGivenName,
-					'sMiddleName' => $sMiddleName,
-					'dtBirth' => $dtBirth,
-					'sGender' => $sGender,
-					'dtHire' => $dtHire,
-					'iInitialLevel' => $iInitialLevel,
-					'sPeriodTime' => $sPeriodTime,
-					'iPTHoursWeek' => $iPTHoursWeek
+					'name' => $name,
+					'dimensions' => $dimensions,
+					'medium' => $medium,
+					'medium_fr' => $medium_fr,
+					'location' => $location,
+					'status' => $status
 				];
 
 				$query = "
-					INSERT INTO tb_Employee(sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek) 
-					VALUES (:sSurname, :sGivenName, :sMiddleName, :dtBirth, :sGender, :dtHire, :iInitialLevel, :sPeriodTime, :iPTHoursWeek);
+					INSERT INTO paintings(name, dimensions, medium, medium_fr, location, status) 
+					VALUES (:name, :dimensions, :medium, :medium_fr, :location, :status);
 				";
 
 				$stmt = $this->pdo->prepare($query);
@@ -111,68 +98,33 @@ namespace Database {
 		}
 
 		/**
-		 * Imports employees to the database
+		 * Edit painting in the database
 		 *
-		 * @param string $data
+		 * @param int $id The id of the painting to be updated
+		 * @param string $name
+		 * @param string $dimensions
+		 * @param string $medium
+		 * @param string $medium_fr
+		 * @param string $location
+		 * @param string $status
 		 * @return bool Returns FALSE on failure 
 		 */
-		function import(array $data): bool
-		{
-			try {
-				$flatData = [];
-				$queryValues = [];
-				foreach ($data as $row) {
-					$queryValues[] = "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-					foreach ($row as $item) {
-						$flatData[] = $item;
-					}
-				}
-
-				$query = 'INSERT INTO tb_Employee(sSurname, sGivenName, sMiddleName, dtBirth, sGender, dtHire, iInitialLevel, sPeriodTime, iPTHoursWeek) VALUES ' . implode(', ', $queryValues);
-
-				$stmt = $this->pdo->prepare($query);
-				$executed = $stmt->execute($flatData);
-
-				return $executed;
-			} catch (Exception $e) {
-				throw $e;
-			}
-		}
-
-		/**
-		 * Adds a new employee to the database
-		 *
-		 * @param int $id The id of the employee to be updated
-		 * @param string $sSurname
-		 * @param string $sGivenName
-		 * @param string $sMiddleName
-		 * @param string $dtBirth
-		 * @param string $sGender
-		 * @param string $dtHire
-		 * @param string $iInitialLevel
-		 * @param string $sPeriodTime
-		 * @param string $iPTHoursWeek
-		 * @return bool Returns FALSE on failure 
-		 */
-		function update(int $id, string  $sSurname, string  $sGivenName, string  $sMiddleName, string  $dtBirth, string $sGender, string  $dtHire, string $iInitialLevel, string $sPeriodTime, string $iPTHoursWeek): bool
+		function update(int $id, string  $name, string  $dimensions, string  $medium, string  $medium_fr, string $location, string  $status): bool
 		{
 			try {
 				$data = [
 					'id' => $id,
-					'sSurname' => $sSurname,
-					'sGivenName' => $sGivenName,
-					'sMiddleName' => $sMiddleName,
-					'dtBirth' => $dtBirth,
-					'sGender' => $sGender,
-					'dtHire' => $dtHire,
-					'iInitialLevel' => $iInitialLevel,
-					'sPeriodTime' => $sPeriodTime,
-					'iPTHoursWeek' => $iPTHoursWeek
+					'name' => $name,
+					'dimensions' => $dimensions,
+					'medium' => $medium,
+					'medium_fr' => $medium_fr,
+					'location' => $location,
+					'status' => $status
 				];
 
 				$query = "
-					UPDATE tb_Employee
-					SET sSurname = :sSurname, sGivenName = :sGivenName, sMiddleName = :sMiddleName, dtBirth = :dtBirth, sGender = :sGender, dtHire = :dtHire, iInitialLevel = :iInitialLevel, sPeriodTime = :sPeriodTime, iPTHoursWeek = :iPTHoursWeek
+					UPDATE paintings
+					SET name = :name, dimensions = :dimensions, medium = :medium, medium_fr = :medium_fr, location = :location, status = :status
 					WHERE id = :id;
 				";
 
@@ -184,9 +136,9 @@ namespace Database {
 		}
 
 		/**
-		 * Deletes an employee from the database
+		 * Deletes a painting from the database
 		 *
-		 * @param int $id The id of the employee to be deleted
+		 * @param int $id The id of the painting to be deleted
 		 * @return bool Returns FALSE on failure 
 		 */
 		function delete(int $id): bool
@@ -197,30 +149,12 @@ namespace Database {
 				];
 
 				$query = "
-					DELETE FROM tb_Employee
+					DELETE FROM paintings
 					WHERE id = :id;
 				";
 
 				$stmt = $this->pdo->prepare($query);
 				return  $stmt->execute($data);
-			} catch (Exception $e) {
-				throw $e;
-			}
-		}
-
-		/**
-		 * Deletes all employees from the database
-		 * @return bool Returns FALSE on failure 
-		 */
-		function clear(): bool
-		{
-			try {
-				$query = "
-					DELETE FROM tb_Employee
-				";
-
-				$stmt = $this->pdo->prepare($query);
-				return  $stmt->execute();
 			} catch (Exception $e) {
 				throw $e;
 			}
