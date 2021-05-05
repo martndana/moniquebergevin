@@ -36,9 +36,7 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <div>
-                            <img id="thumbnailImage" src="" alt="" />
-                        </div>
+                        <div id="thumbnailImage" class="thumbnail"></div>
                     </div>
                     <div class="col-md-12 row">
                         <label for="location" class="form-label">Location: </label>
@@ -73,38 +71,33 @@
             </div>
             <div class="modal-body">
                 <form id="saveForm" class="row g-3">
+                    <div class="col-8">
+                        <label for="title" class="form-label">Title<sup>*</sup></label>
+                        <input type="text" class="form-control" id="inputTitleNew" for="title" required>
+                    </div>
+                    <div class="col-4">
+                        <label for="dimensions" class="form-label">Dimensions<sup>*</sup></label>
+                        <input type="text" class="form-control" id="inputDimensionsNew" for="dimensions">
+                    </div>
                     <div class="col-6">
-                        <div class="">
-                            <label for="title" class="form-label">Title<sup>*</sup></label>
-                            <input type="text" class="form-control" id="inputTitleNew" for="title" required>
-                        </div>
-                        <div class="">
-                            <label for="dimensions" class="form-label">Dimensions<sup>*</sup></label>
-                            <input type="text" class="form-control" id="inputDimensionsNew" for="dimensions">
-                        </div>
-                        <div class="">
+                        <div class="col-md-12">
                             <label for="medium" class="form-label">Medium<sup>*</sup></label>
                             <input type="text" class="form-control" id="inputMediumNew" for="medium" required>
                         </div>
-                        <div class="">
+                        <div class="col-md-12">
                             <label for="medium_fr" class="form-label">Medium (français)<sup>*</sup></label>
                             <input type="text" class="form-control" id="inputMediumFrNew" for="medium_fr" required>
                         </div>
-                        <div class="">
-                            <label for="status" class="form-label">Status<sup>*</sup></label>
-                            <select id="inputStatusNew" for="status" class="form-select" required>
-                                <option value="" selected>Choose...</option>
-                                <option value="1">Available</option>
-                                <option value="2">Unavailable</option>
-                            </select>
-                        </div>
-                    </div>
+                    </div >
                     <div class="col-6">
-                        <div>
-                            <img id="thumbnailImageNew" src="" alt="" />
-                        </div>
+                        <label for="status" class="form-label">Status<sup>*</sup></label>
+                        <select id="inputStatusNew" for="status" class="form-select" required>
+                            <option value="" selected>Choose...</option>
+                            <option value="1">Available</option>
+                            <option value="2">Unavailable</option>
+                        </select>
                     </div>
-                    <div class="">
+                    <div class="col-md-12">
                         <label for="location" class="form-label">Location<sup>*</sup></label>
                         <input type="file" class="form-control" id="inputLocationNew" for="location" required>
                     </div>
@@ -114,7 +107,7 @@
             <div class="modal-footer">
                 <span><sup>*</sup>required</span>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="new-painting-modal-close-button">Close</button>
-                <button type="button" class="btn btn-primary" id="new-painting-modal-update-button" disabled>Save</button>
+                <button type="button" class="btn btn-primary" id="new-painting-modal-save-button">Save</button>
             </div>
         </div>
     </div>

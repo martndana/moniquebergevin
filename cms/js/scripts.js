@@ -82,7 +82,7 @@ function toggleFileSelector() {
     editModalForm.find('#inputMediumFr').val(mediumFr).attr('original', mediumFr);
     editModalForm.find('#inputLocation').html(location).attr('original', location);
     editModalForm.find('#inputStatus').val(status).attr('original', status);
-    editModalForm.find('#thumbnailImage').attr('src', './../../' + location).attr('alt', 'Thumbnail Image Missing');
+    editModalForm.find('#thumbnailImage').css({ 'background-image': 'url("./../../../' + location + '")' }).attr('original', location);
     editModalButtonUpdate.attr('painting-id', paintingId);
 
     // clear errors.
@@ -98,7 +98,7 @@ function handleEditModalClose() {
     editModalForm.find('#inputMediumFr').val('').attr('original', '');
     editModalForm.find('#inputLocation').val('').attr('original', '');
     editModalForm.find('#inputStatus').val('').attr('original', '');
-    editModalForm.find('#thumbnailImage').attr('src', '').attr('alt', '');
+    editModalForm.find('#thumbnailImage').css('background-image', '').attr('original', '');
     let editModalButtonUpdate = $('#edit-painting-modal-update-button');
     editModalButtonUpdate.attr('disabled', 'disabled');
     editModalButtonUpdate.attr('painting-id', '');
@@ -119,7 +119,7 @@ function handleEditModalUpdate(event) {
     let status = editModalForm.find('#inputStatus').val();
 
     let params = { paintingId, title, dimensions, medium, medium_fr, location, status };
-    let url = 'cms/controller/painting/update.php';
+    let url = './../../controller/painting/update.php';
 
     let request = $.ajax({
         method: "POST",
@@ -188,14 +188,8 @@ function handleChangeOnEditFormInput(event) {
     // sweep inputs
     let inputs = form.querySelectorAll('input');
     inputs.forEach((input) => {
-        // check if has the max chars allowed
-        if (input.getAttribute('type').match(/text|date/) && input.getAttribute('maxChar')) {
-            if (input.getAttribute('maxChar') < input.value.trim().length) {
-                errors.push(input.getAttribute('for') + ' is longer than allowed.');
-            }
-        }
         // check if not empty in the case is required
-        if (input.getAttribute('type').match(/text|date/) && input.value.trim() == '' && input.required) {
+        if (input.getAttribute('type').match(/text/) && input.value.trim() == '' && input.required) {
             errors.push(input.getAttribute('for') + ' is empty.');
         }
         // check if different from original
@@ -259,9 +253,13 @@ function handleNewModalSave(event) {
     let medium = newModalForm.find('#inputMediumNew').val();
     let medium_fr = newModalForm.find('#inputMediumFrNew').val();
     let location = newModalForm.find('#inputLocationNew').val();
+    let file = newModalForm.find('#inputLocationNew').prop('files')[0];
+    let fileName = file.name;
+    let fileSize =file.size;
     let status = newModalForm.find('#inputStatusNew').val();
+    console.log(fileName + " - " + fileSize);
 
-    let params = { paintingId, title, dimensions, medium, medium_fr, location, status };
+    let params = { paintingId, title, dimensions, medium, medium_fr, location, fileName, fileSize, status };
 
     // Validation
     let err = false;
@@ -316,9 +314,10 @@ function handleNewModalSave(event) {
         $('#new-painting-modal-save-button').hide();
         $.ajax({
             method: 'POST',
-            url: 'cms/controller/painting/new.php',
+            url: './../../controller/painting/new.php',
+            // contentType: false,
+            // processType: false,
             data: params,
-            datatype: "json",
 
             success: function (result) {
                 if (result.success) {
@@ -429,7 +428,7 @@ function handleDeleteModalConfirm(event) {
 
     // parameters to delete painting
     let params = { paintingId };
-    let url = 'cms/controller/painting/delete.php';
+    let url = './../../controller/painting/delete.php';
 
     // call delete method
     let request = $.ajax({
@@ -467,15 +466,11 @@ function handleDeleteModalOpen(event) {
     let deleteButton = event.target;
     let modalBody = document.querySelector('#delete-painting-button .modal-body');
     let paintingId = deleteButton.getAttribute('painting-id');
-    let paintingData = {};
-    paintingData.givenName = $('td[column-name="given-name"][painting-id="' + paintingId + '"]').text().trim();
-    paintingData.middleName = $('td[column-name="middle-name"][painting-id="' + paintingId + '"]').text().trim();
-    paintingData.lastName = $('td[column-name="surname"][painting-id="' + paintingId + '"]').text().trim();
+    let paintingTitle = $('td[column-name="title"][painting-id="' + paintingId + '"]').text().trim();
     let alert = document.createElement('div');
     alert.classList.add('alert', 'alert-danger');
     alert.setAttribute('role', 'alert');
-    alert.innerHTML = `Are you sure, really sure, that you want to delete ${paintingData.givenName} 
-        ${paintingData.middleName} ${paintingData.lastName} from the database, for the whole eternity?`;
+    alert.innerHTML = 'This action will permanently delete the ' + paintingTitle + ' painting from the database.  Please confirm.';
     modalBody.innerHTML = "";
     modalBody.appendChild(alert);
     // inject paintingid on confirm button

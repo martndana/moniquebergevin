@@ -16,7 +16,7 @@ if (
 
     // validate variable values
     if (
-            $employeeId != NULL
+            $paintingId != NULL
     ) {
         // Opens the database
         include_once('../../database/database.php');
