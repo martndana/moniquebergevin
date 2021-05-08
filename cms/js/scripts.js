@@ -16,11 +16,11 @@ $(document).ready(function () {
     /**
      * Handles the opening of the new painting modal form
      */
-    let newModalButton = $('[action="new-painting"]');
+    // let newModalButton = $('[action="new-painting"]');
     let newModalButtonClose = $('#new-painting-modal-close-button');
     let newModalButtonSave = $('#new-painting-modal-save-button');
 
-    newModalButton.on('click', handleNewModalOpen);
+    // newModalButton.on('click', handleNewModalOpen);
     newModalButtonClose.on('click', handleNewModalClose);
     newModalButtonSave.on('click', handleNewModalSave);
 
@@ -38,10 +38,12 @@ $(document).ready(function () {
 
 function toggleFileSelector() {
     if ($('#toggleFileSelector').html() == 'Change Image...') {
-        $('#fileLocation').show();
+        $('#locationLabel').show()
+        $('#fileLocationUpdate').show();
         $('#toggleFileSelector').html('Cancel Image Change');
     } else {
-        $('#fileLocation').hide();
+        $('#locationLabel').hide()
+        $('#fileLocationUpdate').hide();
         $('#toggleFileSelector').html('Change Image...');
     }
 }
@@ -51,10 +53,12 @@ function toggleFileSelector() {
  *
  * @param event
  */
- function handleEditModalOpen(event) {
+function handleEditModalOpen(event) {
     let editModalForm = $('#edit-painting-button');
     let editModalButtonUpdate = $('#edit-painting-modal-update-button');
     editModalButtonUpdate.attr('disabled', 'disabled');
+    $('#locationLabel').hide()
+    $('#fileLocationUpdate').hide();
 
     // listener to changes on the input fields to enable update button
     let formInputs = document.querySelectorAll('#edit-painting-button input');
@@ -80,13 +84,14 @@ function toggleFileSelector() {
     editModalForm.find('#inputDimensions').val(dimensions).attr('original', dimensions);
     editModalForm.find('#inputMedium').val(medium).attr('original', medium);
     editModalForm.find('#inputMediumFr').val(mediumFr).attr('original', mediumFr);
-    editModalForm.find('#inputLocation').html(location).attr('original', location);
+    editModalForm.find('#fileLocationUpdate').attr('original', location);
+    editModalForm.find('#inputLocation').val(location).attr('original', location);
     editModalForm.find('#inputStatus').val(status).attr('original', status);
-    editModalForm.find('#thumbnailImage').attr('src', './../../' + location).attr('alt', 'Thumbnail Image Missing');
+    editModalForm.find('#thumbnailImage').css({ 'background-image': 'url("./../../../' + location + '")' });
     editModalButtonUpdate.attr('painting-id', paintingId);
 
     // clear errors.
-    $('#edit-form-errors').html('');
+    $('#edit-form-result').html('');
 
 }
 
@@ -96,84 +101,100 @@ function handleEditModalClose() {
     editModalForm.find('#inputDimensions').val('').attr('original', '');
     editModalForm.find('#inputMedium').val('').attr('original', '');
     editModalForm.find('#inputMediumFr').val('').attr('original', '');
+    editModalForm.find('#fileLocationUpdate').val('').attr('original', '');
     editModalForm.find('#inputLocation').val('').attr('original', '');
     editModalForm.find('#inputStatus').val('').attr('original', '');
-    editModalForm.find('#thumbnailImage').attr('src', '').attr('alt', '');
+    editModalForm.find('#thumbnailImage').css('background-image', '').attr('original', '');
     let editModalButtonUpdate = $('#edit-painting-modal-update-button');
     editModalButtonUpdate.attr('disabled', 'disabled');
     editModalButtonUpdate.attr('painting-id', '');
+    $('#saveChangesForm').show();
+    $('#edit-painting-modal-update-button').show();
 
     // clear errors.
-    $('#edit-form-errors').html('');
+    $('#edit-form-result').html('');
 }
 
 function handleEditModalUpdate(event) {
     let button = event.target;
     let paintingId = button.getAttribute('painting-id');
-    let editModalForm = $('#edit-painting-button');
-    let title = editModalForm.find('#inputTitle').val();
-    let dimensions = editModalForm.find('#inputDimensions').val();
-    let medium = editModalForm.find('#inputMedium').val();
-    let medium_fr = editModalForm.find('#inputMediumFr').val();
-    let location = editModalForm.find('#inputLocation').val();
-    let status = editModalForm.find('#inputStatus').val();
 
-    let params = { paintingId, title, dimensions, medium, medium_fr, location, status };
-    let url = 'cms/controller/painting/update.php';
+    let formData = new FormData($('#saveChangesForm')[0]);
 
-    let request = $.ajax({
-        method: "POST",
-        url,
-        data: params
-    })
+    formData.append('paintingId', paintingId);
 
-    request.done(function (response) {
-        if (response.success) {
-            let data = response.payload.data;
-            let row = $('table tbody tr[painting-id="' + paintingId + '"]');
-            let title = row.find('td[column-name="title"]');
-            let dimensions = row.find('td[column-name="dimensions"]');
-            let medium = row.find('td[column-name="medium"]');
-            let mediumFr = row.find('td[column-name="medium_fr"]');
-            let location = row.find('td[column-name="location"]');
-            let status = row.find('td[column-name="status"]');
+    $('#edit-painting-modal-update-button').hide();
+    $.ajax({
+        url: './../../controller/painting/update.php',
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
 
-            title.text(data.title);
-            dimensions.text(data.dimensions);
-            medium.text(data.medium);
-            mediumFr.text(renderDate(data.medium_fr));
-            location.text(data.location);
-            status.attr('value', data.status).text((data.status == 1)? "Available" : "Unavailable");
 
-            $('#edit-painting-modal-close-button').click();
-
-            row.animate({
-                'backgroundColor': '#f6ee00',
-                'fontWeight': 'bolder',
-            }, 200, "linear", function () {
-                row.animate({
-                    'backgroundColor': '#fff',
-                    'fontWeight': 'regular',
-                }, 3000, "linear"
-                )
+        success: function (result) {
+            if (result.success) {
+                displaySuccessUpdate(result.response);
+            } else {
+                displayFailUpdate(result.error);
             }
-            );
+        },
 
+        error: () => {
+            displayFail("An error occured when attempting to connect with the server.  <br>Please try again later.", "Unknown Error");
         }
-        else {
-            let errorCanvas = document.getElementById('edit-form-errors');
-            errorCanvas.innerHTML = '';
+    }) // End of ajax
 
-            let alert = document.createElement('div');
-            alert.classList.add('alert', 'alert-danger');
-            alert.setAttribute('role', 'alert');
-            alert.innerHTML = (response.payload && response.payload.message)
-                ? response.payload.message
-                : response.toString();
-            errorCanvas.appendChild(alert);
-        }
-    });
+}
 
+function displaySuccessUpdate(response) {
+    $('#saveChangesForm').hide();
+    $('#edit-form-result').removeClass('alert alert-danger');
+    console.log(response);
+    let stat = (response.status==1)? 'Available' : 'Unavailable';
+
+    // Need to update the existing table row instead of adding a new one.
+    
+    let row = $('table tbody tr[painting-id="' + response.id + '"]'); 
+
+    $('[column-name="id"][painting-id="' + response.id + '"]').text(response.id);
+    $('[column-name="title"][painting-id="' + response.id + '"]').text(response.title);
+    $('[column-name="dimensions"][painting-id="' + response.id + '"]').text(response.dimensions);
+    $('[column-name="medium"][painting-id="' + response.id + '"]').text(response.medium);
+    $('[column-name="medium_fr"][painting-id="' + response.id + '"]').text(response.medium_fr);
+    $('[column-name="location"][painting-id="' + response.id + '"]').text(response.location);
+    $('[column-name="status"][painting-id="' + response.id + '"]').attr('value=', response.status).text(stat);
+    $('[column-name="thumbnail"][painting-id="'  + response.id + '"] img').attr('src', "../../../" + response.location).attr('alt', response.title + ' Image');
+
+    let paintingName = response.title;
+    $('#edit-form-result').html(paintingName + " has been updated successfully.");
+
+    let editModalButton = $('[action="edit-painting"]');
+    editModalButton.on('click', handleEditModalOpen);
+
+    let deleteModalButton = $('[action="delete-painting"]');
+    deleteModalButton.on('click', handleDeleteModalOpen);
+
+    row.animate({
+        'backgroundColor': '#49AD49',
+        'fontWeight': 'bolder',
+    }, 200, "linear", function () {
+        row.animate({
+            'backgroundColor': '#fff',
+            'fontWeight': 'regular',
+        }, 1000, "linear"
+        )
+    }
+    );
+}
+
+function displayFailUpdate(response) {
+    $('#saveChangesForm').hide();
+    $('#edit-form-result').addClass('alert alert-danger');
+    $('#edit-form-result').html(response);
+    console.log(response);
 }
 
 function handleChangeOnEditFormInput(event) {
@@ -187,20 +208,23 @@ function handleChangeOnEditFormInput(event) {
     let form = document.querySelector('#edit-painting-button form');
     // sweep inputs
     let inputs = form.querySelectorAll('input');
+    console.log(inputs);
     inputs.forEach((input) => {
-        // check if has the max chars allowed
-        if (input.getAttribute('type').match(/text|date/) && input.getAttribute('maxChar')) {
-            if (input.getAttribute('maxChar') < input.value.trim().length) {
-                errors.push(input.getAttribute('for') + ' is longer than allowed.');
-            }
-        }
         // check if not empty in the case is required
-        if (input.getAttribute('type').match(/text|date/) && input.value.trim() == '' && input.required) {
+        if (input.getAttribute('type').match(/text/) && input.value.trim() == '' && input.required) {
             errors.push(input.getAttribute('for') + ' is empty.');
         }
+
+        if (input.getAttribute('id') == 'fileLocationUpdate' && input.value.trim() != '') {
+            let newBackground = 'url("' + input.value.trim() + '"';
+            $('#edit-painting-button #thumbnailImage').css({'background-image': newBackground});
+        }
+
         // check if different from original
-        if (input.getAttribute('original').toLowerCase() != input.value.trim().toLowerCase()) {
-            changed++;
+        if (input.getAttribute('id') != 'thumbnailImage') {
+            if (input.getAttribute('original').toLowerCase() != input.value.trim().toLowerCase()) {
+                changed++;
+            }
         }
     });
 
@@ -220,7 +244,7 @@ function handleChangeOnEditFormInput(event) {
         errors.push('There are no changes in the form.');
     }
 
-    let errorCanvas = document.getElementById('edit-form-errors');
+    let errorCanvas = document.getElementById('edit-form-result');
     errorCanvas.innerHTML = '';
 
     if (errors.length > 0) {
@@ -242,26 +266,25 @@ function handleChangeOnEditFormInput(event) {
 /********************************************************************
  * NEW PAINTING SECTION
  ********************************************************************/
-function handleNewModalOpen(event) {
-    let newModalForm = $('#new-painting-button');
-}
 
-function handleNewModalClose(event) {
+function handleNewModalClose() {
     clearForm();
 }
 
-function handleNewModalSave(event) {
-    let button = event.target;
-    let paintingId = button.getAttribute('painting-id');
+function handleNewModalSave() {
     let newModalForm = $('#new-painting-button');
     let title = newModalForm.find('#inputTitleNew').val();
     let dimensions = newModalForm.find('#inputDimensionsNew').val();
     let medium = newModalForm.find('#inputMediumNew').val();
     let medium_fr = newModalForm.find('#inputMediumFrNew').val();
     let location = newModalForm.find('#inputLocationNew').val();
+    let file = newModalForm.find('#inputLocationNew').prop('files')[0];
     let status = newModalForm.find('#inputStatusNew').val();
+    console.log(file);
 
-    let params = { paintingId, title, dimensions, medium, medium_fr, location, status };
+    let formData = new FormData(document.getElementById("saveForm"));
+    
+    // let params = { paintingId, title, dimensions, medium, medium_fr, location, fileName, fileSize, status };
 
     // Validation
     let err = false;
@@ -315,10 +338,13 @@ function handleNewModalSave(event) {
     } else {
         $('#new-painting-modal-save-button').hide();
         $.ajax({
-            method: 'POST',
-            url: 'cms/controller/painting/new.php',
-            data: params,
-            datatype: "json",
+            url: './../../controller/painting/new.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
 
             success: function (result) {
                 if (result.success) {
@@ -341,18 +367,21 @@ function displaySuccess(response) {
     $('#saveForm').hide();
     $('#saveResult').removeClass('alert alert-danger');
 
+    let stat = (response.status==1)? 'Available' : 'Unavailable';
     // Appending a new row to the top of the tbody element
     let newRow = '<tr painting-id="' + response.id + '">' +
         '<td column-name="id" painting-id="' + response.id + '">' + response.id + '</td>' +
         '<td column-name="title" painting-id="' + response.id + '">' + response.title + '</td>' +
         '<td column-name="dimensions" painting-id="' + response.id + '">' + response.dimensions + '</td>' +
         '<td column-name="medium" painting-id="' + response.id + '">' + response.medium + '</td>' +
-        '<td column-name="medium_fr" painting-id="' + response.id + '">' + response.mediumFr + '</td>' +
+        '<td column-name="medium_fr" painting-id="' + response.id + '">' + response.medium_fr + '</td>' +
         '<td column-name="location" painting-id="' + response.id + '">' + response.location + '</td>' +
-        '<td column-name="status" painting-id="' + response.id + '">' + response.status + '</td>' +
+        '<td column-name="status" painting-id="' + response.id + '" value="' + response.status + '">' + stat + '</td>' +
+        '<td column-name="thumbnail" painting-id="' + response.id + '"><img src="../../../' + response.location + '" alt="' + response.title + ' Image" style="width: 60px; height: 80px;"></td>' +
+        '<td column-name="date_added" painting-id="' + response.id + '">' + response.date_added + '</td>' +
         '<td column-name="action-edit" painting-id="' + response.id + '">' +
-        '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-painting-button" action="edit-painting" painting-id="' + response.id + '">Edit</button> ' +
-        '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-painting-button" action="delete-painting" painting-id="' + response.id + '">Delete</button></td>' +
+        '<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-painting-button" action="edit-painting" painting-id="' + response.id + '"><i painting-id="' + response.id +'" class="fas fa-pencil-alt"></i></button> ' +
+        '<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-painting-button" action="delete-painting" painting-id="' + response.id + '"><i class="far fa-trash-alt" painting-id="' + response.id + '"></i></button></td>' +
         '</tr>';
 
 
@@ -376,7 +405,7 @@ function displaySuccess(response) {
         row.animate({
             'backgroundColor': '#fff',
             'fontWeight': 'regular',
-        }, 500, "linear"
+        }, 1000, "linear"
         )
     }
     );
@@ -386,6 +415,7 @@ function displayFail(response) {
     $('#saveForm').hide();
     $('#saveResult').addClass('alert alert-danger');
     $('#saveResult').html(response);
+    console.log(response);
 }
 
 function clearForm() {
@@ -425,11 +455,11 @@ function handleDeleteModalConfirm(event) {
     let modal = document.getElementById('delete-painting-button');
     let modalCloseButton = document.getElementById('delete-painting-modal-close-button');
     let paintingId = button.getAttribute('painting-id');
-
+    console.log(button);
 
     // parameters to delete painting
     let params = { paintingId };
-    let url = 'cms/controller/painting/delete.php';
+    let url = './../../controller/painting/delete.php';
 
     // call delete method
     let request = $.ajax({
@@ -457,6 +487,7 @@ function handleDeleteModalConfirm(event) {
             );
         } else {
             let modalBody = document.querySelector('#delete-painting-button .modal-body .alert[role="alert"]');
+            console.log(response);
             modalBody.innerHTML = response;
         }
     });
@@ -467,20 +498,16 @@ function handleDeleteModalOpen(event) {
     let deleteButton = event.target;
     let modalBody = document.querySelector('#delete-painting-button .modal-body');
     let paintingId = deleteButton.getAttribute('painting-id');
-    let paintingData = {};
-    paintingData.givenName = $('td[column-name="given-name"][painting-id="' + paintingId + '"]').text().trim();
-    paintingData.middleName = $('td[column-name="middle-name"][painting-id="' + paintingId + '"]').text().trim();
-    paintingData.lastName = $('td[column-name="surname"][painting-id="' + paintingId + '"]').text().trim();
+    let paintingTitle = $('td[column-name="title"][painting-id="' + paintingId + '"]').text().trim();
     let alert = document.createElement('div');
     alert.classList.add('alert', 'alert-danger');
     alert.setAttribute('role', 'alert');
-    alert.innerHTML = `Are you sure, really sure, that you want to delete ${paintingData.givenName} 
-        ${paintingData.middleName} ${paintingData.lastName} from the database, for the whole eternity?`;
+    alert.innerHTML = 'This action will permanently delete the ' + paintingTitle + ' painting from the database.  Please confirm.';
     modalBody.innerHTML = "";
     modalBody.appendChild(alert);
     // inject paintingid on confirm button
-    let confirmpaintingDeleteButton = document.getElementById('delete-painting-modal-confirm-button');
-    confirmpaintingDeleteButton.setAttribute('painting-id', paintingId);
+    let confirmPaintingDeleteButton = document.getElementById('delete-painting-modal-confirm-button');
+    confirmPaintingDeleteButton.setAttribute('painting-id', paintingId);
 }
 
 function handleDeleteModalClose() {

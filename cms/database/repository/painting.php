@@ -47,7 +47,7 @@ class Painting
             ORDER BY date_added
         ";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['id' => $employeeId]);
+        $stmt->execute(['id' => $paintingId]);
 
         $dataSet = [];
         while ($row = $stmt->fetch()) {
@@ -61,14 +61,14 @@ class Painting
      * Adds a new paintings to the database
      *
      * @param string $sName
-     * @param string $sdimensions
+     * @param string $sDimensions
      * @param string $sMedium
      * @param string $sMedium_Fr
      * @param string $sLocation
      * @param int $iStatus
      * @return bool Returns FALSE on failure 
      */
-    function insert(string $sName, string $sdimensions, string $sMedium, string $sMedium_Fr, string $sLocation, int $iStatus): bool
+    function insert(string $sName, string $sDimensions, string $sMedium, string $sMedium_Fr, string $sLocation, int $iStatus): bool
     {
         try {
             $data = [
@@ -112,7 +112,7 @@ class Painting
             $data = [
                 'id' => $id,
                 'sName' => $sName,
-                'sDimensions' => $sDimensions,
+                'sDimensions' => $sdimensions,
                 'sMedium' => $sMedium,
                 'sMedium_Fr' => $sMedium_Fr,
                 'sLocation' => $sLocation,

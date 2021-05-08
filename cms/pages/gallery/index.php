@@ -39,13 +39,11 @@ $dbConn = new DbConnection();
                         <td column-name="medium_fr" painting-id="<?php echo $painting->id; ?>"><?php echo $painting->medium_fr; ?></td>
                         <td column-name="location" painting-id="<?php echo $painting->id; ?>"><?php echo $painting->location; ?></td>
                         <td column-name="status" painting-id="<?php echo $painting->id; ?>" value="<?php echo $painting->status; ?>"><?php echo ($painting->status == 1) ? 'Available' : 'Unavailable' ; ?></td>
-                        <td></td>
-                        <!-- <td column-name="thumbnail" painting-id="<?php echo $painting->id; ?>"><img src="./../../<?php echo $painting->location; ?>" alt="<?php echo $painting->name; ?>" style="width: 60px; height: 80px;"></td> -->
+                        <td column-name="thumbnail" painting-id="<?php echo $painting->id; ?>"><img src="../../../<?php echo $painting->location; ?>" alt="<?php echo $painting->name; ?>" style="width: 60px; height: 80px;"></td>
                         <td column-name="date_added" painting-id="<?php echo $painting->id; ?>"><?php echo $painting->date_added; ?></td>
                         <td column-name="action-edit" painting-id="<?php echo $painting->id; ?>">
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit-painting-button" action="edit-painting" painting-id="<?php echo $painting->id; ?>" id="edit-painting"><i painting-id="<?php echo $painting->id; ?>" class="fas fa-pencil-alt"></i></button>
-                            <!-- <button type="button" class="btn btn-primary" painting-id="<?php echo $painting->id; ?>" id="edit-painting"><i painting-id="<?php echo $painting->id; ?>" class="fas fa-pencil-alt"></i></button> -->
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-painting-button" action="delete-painting" painting-id="<?php echo $painting->id; ?>"><i class="far fa-trash-alt"></i></button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-painting-button" action="delete-painting" painting-id="<?php echo $painting->id; ?>"><i class="far fa-trash-alt" painting-id="<?php echo $painting->id; ?>"></i></button>
                         </td>
                     </tr>
                 <?php endforeach; ?>

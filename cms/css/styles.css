@@ -1,5 +1,6 @@
 .smallify {
     font-size: 10pt;
+    text-align: right;
 }
 
 .hyper {
@@ -16,3 +17,16 @@
         max-width: 700px !important;
     }
 } */
+
+.thumbnail {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    height: 300px;
+    width: 220px;
+
+}
+
+.form-margin {
+    margin-left: 8px;
+}
