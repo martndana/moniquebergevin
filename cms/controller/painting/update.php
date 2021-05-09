@@ -120,7 +120,7 @@ if (
                         //$paintingID = $painting->pdo->lastInsertId();
                         $newPainting = $painting->getOne($paintingId);
                         $result['response'] = array (
-                            'id' => $paintingID,
+                            'id' => $paintingId,
                             'title' => $title,
                             'dimensions' => $dimensions,
                             'medium' => $medium,

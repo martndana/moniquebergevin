@@ -40,11 +40,12 @@ function toggleFileSelector() {
     if ($('#toggleFileSelector').html() == 'Change Image...') {
         $('#locationLabel').show()
         $('#fileLocationUpdate').show();
-        $('#toggleFileSelector').html('Cancel Image Change');
-    } else {
-        $('#locationLabel').hide()
-        $('#fileLocationUpdate').hide();
-        $('#toggleFileSelector').html('Change Image...');
+        $('#toggleFileSelector').hide();
+    //     $('#toggleFileSelector').html('Cancel Image Change');
+    // } else {
+    //     $('#locationLabel').hide()
+    //     $('#fileLocationUpdate').hide();
+    //     $('#toggleFileSelector').html('Change Image...');
     }
 }
 
@@ -109,6 +110,9 @@ function handleEditModalClose() {
     editModalButtonUpdate.attr('disabled', 'disabled');
     editModalButtonUpdate.attr('painting-id', '');
     $('#saveChangesForm').show();
+    $('#locationLabel').hide()
+    $('#fileLocationUpdate').hide();
+    $('#toggleFileSelector').show();
     $('#edit-painting-modal-update-button').show();
 
     // clear errors.
@@ -159,14 +163,14 @@ function displaySuccessUpdate(response) {
     
     let row = $('table tbody tr[painting-id="' + response.id + '"]'); 
 
-    $('[column-name="id"][painting-id="' + response.id + '"]').text(response.id);
-    $('[column-name="title"][painting-id="' + response.id + '"]').text(response.title);
-    $('[column-name="dimensions"][painting-id="' + response.id + '"]').text(response.dimensions);
-    $('[column-name="medium"][painting-id="' + response.id + '"]').text(response.medium);
-    $('[column-name="medium_fr"][painting-id="' + response.id + '"]').text(response.medium_fr);
-    $('[column-name="location"][painting-id="' + response.id + '"]').text(response.location);
-    $('[column-name="status"][painting-id="' + response.id + '"]').attr('value=', response.status).text(stat);
-    $('[column-name="thumbnail"][painting-id="'  + response.id + '"] img').attr('src', "../../../" + response.location).attr('alt', response.title + ' Image');
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="id"]').text(response.id);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="title"]').text(response.title);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="dimensions"]').text(response.dimensions);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="medium"]').text(response.medium);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="medium_fr"]').text(response.medium_fr);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="location"]').text(response.location);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="status"]').attr('value', response.status).text(stat);
+    $('table tbody tr[painting-id="' + response.id + '"] td[column-name="thumbnail"] img').attr('src', "../../../" + response.location).attr('alt', response.title + ' Image');
 
     let paintingName = response.title;
     $('#edit-form-result').html(paintingName + " has been updated successfully.");
@@ -216,8 +220,15 @@ function handleChangeOnEditFormInput(event) {
         }
 
         if (input.getAttribute('id') == 'fileLocationUpdate' && input.value.trim() != '') {
-            let newBackground = 'url("' + input.value.trim() + '"';
-            $('#edit-painting-button #thumbnailImage').css({'background-image': newBackground});
+            const file = $('#fileLocationUpdate').prop('files')[0];
+            const reader = new FileReader;
+
+            reader.addEventListener("load", function () {
+                let newBackground = 'url("' + reader.result + '"';
+                $('#edit-painting-button #thumbnailImage').css({'background-image': newBackground});
+            }, false);
+
+            reader.readAsDataURL(file);
         }
 
         // check if different from original
