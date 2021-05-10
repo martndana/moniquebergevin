@@ -12,6 +12,5 @@ namespace Database {
     {
         function get(): array;
         function delete(int $id): bool;
-        function clear(): bool;
     }
 }

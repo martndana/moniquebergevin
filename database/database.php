@@ -1,19 +1,11 @@
 <?php
 
-/**
- * Manages the database
- * 
- * Purpose: INFO5094 LAMP 2 Group Project - W21
- * Author:  Group 1
- */
-
 declare(strict_types=1);    // Sets as strict types
 
 // Includes the repositories
-include_once('repository/employee.php');
+include_once('repository/painting.php');
 include_once('repository/user.php');
-include_once('repository/salarygrid.php');
-include_once('controller/salarygrid.php');
+
 
 /**
  * Controls the connection to the database
@@ -37,32 +29,26 @@ class DbConnection
     /**
      * Methods to work with the employee table
      *
-     * @var Database\Employee
+     * @var Database\Painting
      */
-    public $employee;
+    public $painting;
 
     /**
-     * Methods to work with the user table
+     * Methods to work with the employee table
      *
      * @var Database\User
      */
     public $user;
 
-    /**
-     * Methods to work with the salary grid table
-     *
-     * @var Database\SalaryGrid
-     */
-    public $salaryGrid;
-
     function __construct()
     {
         $this->isConnected = false;
 
+        // $host = "db-moniquebergevin.c9wt5b34nzxa.us-east-2.rds.amazonaws.com";
         $host = "localhost";
-        $db = "human_resource";
-        $user = "hr_user";
-        $pass = "usrEmpHr#21";
+        $db = "moniquebergevin";
+        $user = "martndana";
+        $pass = "Fred3381!";
 
         $charset = "utf8mb4";
         $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -78,9 +64,8 @@ class DbConnection
             $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
             // Repositories
-            $this->employee = new Database\Employee($this);
+            $this->painting = new Database\Painting($this);
             $this->user = new Database\User($this);
-            $this->salaryGrid = new Database\SalaryGrid($this);
 
             // Sets as connected
             $this->isConnected = true;
