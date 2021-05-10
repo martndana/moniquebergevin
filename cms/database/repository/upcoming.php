@@ -21,7 +21,7 @@ class Upcoming
             SELECT id, description, description_fr, status
             FROM upcoming 
             WHERE status > 0 
-            ORDER BY id
+            ORDER BY id DESC
         ";
         $stmt = $this->pdo->query($query);
 

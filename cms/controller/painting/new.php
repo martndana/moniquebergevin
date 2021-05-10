@@ -16,7 +16,6 @@ function setError($message) {
 }
 
 // Check posted data
-
 if (
     isset($_POST['inputTitleNew'])
     &&  isset($_POST['inputDimensionsNew'])
