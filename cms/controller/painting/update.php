@@ -34,7 +34,7 @@ if (
     $mediumFr       = filter_var($_POST['inputMediumFr']        , FILTER_SANITIZE_STRING);
     $currLocation   = filter_var($_POST['inputLocation']        , FILTER_SANITIZE_STRING);
     $status         = filter_var($_POST['inputStatus']          , FILTER_SANITIZE_NUMBER_INT);
-    $dimensions     = mb_strtoupper($dimensions, 'UTF-8');
+    $dimensions     = mb_strtolower($dimensions, 'UTF-8');
 
     $fileDestination = '';
     $errorCounter = 0;
@@ -46,97 +46,78 @@ if (
     
     if ($painting) {
 
-        // Verify no duplicates
-    
-        // Creates hashes for the current records in the database
-        // $paintings = $painting->get();
-        // foreach ($paintings as $p) {
-        //     $hashes[] =
-        //         $p->name . "," .
-        //         $p->dimensions . "," .
-        //         $p->medium . "," .
-        //         $p->medium_fr . "," .
-        //         $p->status;
-        // }
-        // $hash = $title . "," . $dimensions . "," . $medium . "," . $mediumFr . "," . $status;
+        if ($_FILES['inputLocationUpdate']['error'] == 4) {
+            $fileDestination = $currLocation;
+        } else {
+            $fileName       = filter_var($_FILES['inputLocationUpdate']['name']        , FILTER_SANITIZE_STRING);  // file from form
+            $fileSize       = filter_var($_FILES['inputLocationUpdate']['size']        , FILTER_SANITIZE_NUMBER_INT);  // file from form
+            $location       = filter_var($_FILES['inputLocationUpdate']['tmp_name']        , FILTER_SANITIZE_STRING);
+
+            $newTitle = mb_strtolower($title, 'UTF-8');
+            $origName = $fileName;  // file name from uploaded file
+            $origSize = $fileSize;  // file size from uploaded file
         
-        // if (!in_array($hash, $hashes)) {
+            $fileExt = explode(".", $origName);
+            $fileActualExt = strtolower(end($fileExt));  // Capture extension
+        
+            $allowed =  array("jpg", "jpeg", "png"); //List of allowed extensions for the images.
+        
+            // Valid extension check
+            if (in_array($fileActualExt, $allowed)) {
 
-            if ($_FILES['inputLocationUpdate']['error'] == 4) {
-                $fileDestination = $currLocation;
-            } else {
-                $fileName       = filter_var($_FILES['inputLocationUpdate']['name']        , FILTER_SANITIZE_STRING);  // file from form
-                $fileSize       = filter_var($_FILES['inputLocationUpdate']['size']        , FILTER_SANITIZE_NUMBER_INT);  // file from form
-                $location       = filter_var($_FILES['inputLocationUpdate']['tmp_name']        , FILTER_SANITIZE_STRING);
+                // Filesize check
+                if ($origSize <= 20000000) {
+                    
+                    $cleanNewTitle = removeAccents($newTitle);
+                    $imageFullName = $cleanNewTitle . "." . date("j.n.Y.h.i.s") . "." . $fileActualExt;  // Create a unique filename to ensure no overriding
+                    
+                    //  Set website root folder path
+                    $fileDestination = "../../../images/uploads/" . $imageFullName;
 
-                $newTitle = mb_strtolower($title, 'UTF-8');
-                $origName = $fileName;  // file name from uploaded file
-                $origSize = $fileSize;  // file size from uploaded file
-            
-                $fileExt = explode(".", $origName);
-                $fileActualExt = strtolower(end($fileExt));  // Capture extension
-            
-                $allowed =  array("jpg", "jpeg", "png"); //List of allowed extensions for the images.
-            
-                // Valid extension check
-                if (in_array($fileActualExt, $allowed)) {
-
-                    // Filesize check
-                    if ($origSize <= 20000000) {
-                        
-                        $cleanNewTitle = removeAccents($newTitle);
-                        $imageFullName = $cleanNewTitle . "." . date("j.n.Y.h.i.s") . "." . $fileActualExt;  // Create a unique filename to ensure no overriding
-                        
-                        //  Set website root folder path
-                        $fileDestination = "../../../images/uploads/" . $imageFullName;
-
-                        // Move file to website root folder
-                        if (!move_uploaded_file($location, $fileDestination)) {
-                            setError('Image did not get moved properly.');
-                            $errorCounter++;
-                        };
-
-                        if (file_exists($currLocation)) { 
-                            unlink($currLocation);
-                        };
-
-                    } else {
-                        setError("The file you are attempting to upload is too large.  The maximum filesize is 20Mb.  Please try again.");
+                    // Move file to website root folder
+                    if (!move_uploaded_file($location, $fileDestination)) {
+                        setError('Image did not get moved properly.');
                         $errorCounter++;
-                    }
+                    };
+
+                    if (file_exists($currLocation)) { 
+                        unlink($currLocation);
+                    };
+
                 } else {
-                    setError("Invalid file extension.  Please only upload jpg, jpeg or png files.");
+                    setError("The file you are attempting to upload is too large.  The maximum filesize is 20Mb.  Please try again.");
                     $errorCounter++;
                 }
+            } else {
+                setError("Invalid file extension.  Please only upload jpg, jpeg or png files.");
+                $errorCounter++;
             }
+        }
 
-            if ($errorCounter === 0) {
+        if ($errorCounter === 0) {
 
-                // Add record to database
-                try {
-                    $response = $painting->update($paintingId, $title, $dimensions, $medium, $mediumFr, $fileDestination, $status);
-                    if ($response) {
-                        
-                        //$paintingID = $painting->pdo->lastInsertId();
-                        $newPainting = $painting->getOne($paintingId);
-                        $result['response'] = array (
-                            'id' => $paintingId,
-                            'title' => $title,
-                            'dimensions' => $dimensions,
-                            'medium' => $medium,
-                            'medium_fr' => $mediumFr,
-                            'location' => $fileDestination,
-                            'status' => $status,
-                            'date_added' => $newPainting[0]->date_added
-                        );
-                    }
-                } catch (Exception $e) {
-                    setError($e->getMessage());
+            // Add record to database
+            try {
+                $response = $painting->update($paintingId, $title, $dimensions, $medium, $mediumFr, $fileDestination, $status);
+                if ($response) {
+                    
+                    //$paintingID = $painting->pdo->lastInsertId();
+                    $newPainting = $painting->getOne($paintingId);
+                    $result['response'] = array (
+                        'id' => $paintingId,
+                        'title' => $title,
+                        'dimensions' => $dimensions,
+                        'medium' => $medium,
+                        'medium_fr' => $mediumFr,
+                        'location' => $fileDestination,
+                        'status' => $status,
+                        'date_added' => $newPainting[0]->date_added
+                    );
                 }
+            } catch (Exception $e) {
+                setError($e->getMessage());
             }
-        // } else {
-        //     setError('Duplicate record exists');
-        // }
+        }
     } else {
         setError('Error connecting to the database');
     }
@@ -169,7 +150,6 @@ function removeAccents($dirtyStr) {
     }
     
     return $cleanStr;
-
 }
 
 ?>
