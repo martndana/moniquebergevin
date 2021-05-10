@@ -38,6 +38,7 @@ if (
     $dimensions     = mb_strtolower($dimensions, 'UTF-8');
 
 
+
     $newTitle = mb_strtolower($title, 'UTF-8');
     $origName = $fileName;  // file name from uploaded file
     $origSize = $fileSize;  // file size from uploaded file
@@ -159,6 +160,7 @@ function removeAccents($dirtyStr) {
     $cleanStr = '';
     $length = mb_strlen($dirtyStr, "UTF-8");
     $validChars = '_abcdefghijklmnopqrstuvwxyz0123456789';
+
     for ($i = 0; $i < $length; $i++) {
         if (strpos($validChars, $dirtyStr[$i]) >= 0) {
             $cleanStr .= $dirtyStr[$i];

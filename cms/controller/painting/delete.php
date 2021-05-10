@@ -16,6 +16,7 @@ if (
 
     // validate variable values
     if ($paintingId != NULL) {
+
         // Opens the database
         include_once('../../database/database.php');
         $dbConn = new DbConnection();
