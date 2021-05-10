@@ -15,9 +15,8 @@ if (
     $paintingId = filter_var($_POST['paintingId'], FILTER_SANITIZE_NUMBER_INT);
 
     // validate variable values
-    if (
-            $paintingId != NULL
-    ) {
+    if ($paintingId != NULL) {
+
         // Opens the database
         include_once('../../database/database.php');
         $dbConn = new DbConnection();

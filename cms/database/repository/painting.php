@@ -47,7 +47,7 @@ class Painting
             ORDER BY date_added
         ";
         $stmt = $this->pdo->prepare($query);
-        $stmt->execute(['id' => $employeeId]);
+        $stmt->execute(['id' => $paintingId]);
 
         $dataSet = [];
         while ($row = $stmt->fetch()) {
@@ -112,7 +112,7 @@ class Painting
             $data = [
                 'id' => $id,
                 'sName' => $sName,
-                'sDimensions' => $sDimensions,
+                'sDimensions' => $sdimensions,
                 'sMedium' => $sMedium,
                 'sMedium_Fr' => $sMedium_Fr,
                 'sLocation' => $sLocation,

@@ -1,5 +1,6 @@
 .smallify {
     font-size: 10pt;
+    text-align: right;
 }
 
 .hyper {
@@ -18,11 +19,13 @@
 } */
 
 .thumbnail {
-    /* background-image: url("./../../../images/uploads/a_demain.5ee77f3625a1c.jpg"); */
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
     height: 300px;
     width: 220px;
+}
 
+.form-margin {
+    margin-left: 8px;
 }
