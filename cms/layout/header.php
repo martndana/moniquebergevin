@@ -1,6 +1,6 @@
 <?php
 
-define('ROOT_PATH', str_replace($_SERVER['DOCUMENT_ROOT'], '',  dirname(__DIR__)) . '/');
+define('ROOT_PATH', str_replace($_SERVER['DOCUMENT_ROOT'], '',  dirname(dirname(__FILE__))) . '/');
 
 // Gets the session
 require_once($_SERVER['DOCUMENT_ROOT'] . '/cms/session/user.php');

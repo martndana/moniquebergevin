@@ -37,7 +37,7 @@
     $sql .= ' WHERE `status` = ' . $filter;
   }
 
-  $sql .=  ' ORDER BY `name`';
+  $sql .=  ' ORDER BY `id` DESC';
 
   $result = null;
   $stmt = mysqli_stmt_init($link);

@@ -26,7 +26,7 @@ if (isset($_POST['username']) && isset($_POST['password']) && $_POST['username']
 
         // Sets the result
         $result['success'] = true;
-        $result['redirect'] =  str_replace($_SERVER['DOCUMENT_ROOT'], '',  dirname(__DIR__)) . '/';
+        $result['redirect'] =  str_replace($_SERVER['DOCUMENT_ROOT'], '',  dirname(dirname(__FILE__))) . '/';
     }
 }
 
