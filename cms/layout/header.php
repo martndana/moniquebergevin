@@ -46,7 +46,10 @@ function getAbsolutePath(string $uri)
 </head>
 <body>
     <header>
-        <h1 class="text-center my-3">Content Management System</h1>
+        <div class="d-flex flex-row justify-content-between px-3">
+            <h1 class="text-center my-3 ml-5">Content Management System</h1>
+            <span class="align-self-center"><a class="btn btn-secondary" href="/" target="_blank">Go to Live Site</a></span>
+        </div>
 
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
