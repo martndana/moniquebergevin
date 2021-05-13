@@ -6,10 +6,10 @@
     $userSession = new SessionUser();
 ?>
 
-<div class="container min-height-container d-flex justify-content-center align-items-center">
+<div class="container min-height-container d-flex justify-content-center align-items-center mt-5">
     <?php if ($userSession->isLogged()) : ?>
         <div class="text-center">
-            <h2>Welcome!</h2>
+            <h2>Welcome</h2>
             <div>Select an option on the menu above.</div>
         </div>
     <?php else : ?>
