@@ -22,24 +22,24 @@ function populateGallery() {
     img.addEventListener("click", function(){ modalShow(i); });
     item.appendChild(img);
 
-    // Painting title
-    let title = document.createElement("h5");
-    title.innerHTML = paintings[i].name;
-    item.appendChild(title);
+    // // Painting title
+    // let title = document.createElement("h5");
+    // title.innerHTML = paintings[i].name;
+    // item.appendChild(title);
 
-    // Painting dimensions
-    let dimensions = document.createElement("div");
-    dimensions.innerHTML = paintings[i].dimensions;
-    item.appendChild(dimensions);
+    // // Painting dimensions
+    // let dimensions = document.createElement("div");
+    // dimensions.innerHTML = paintings[i].dimensions;
+    // item.appendChild(dimensions);
 
-    // Painting medium
-    let medium = document.createElement("div");
-    if (paintings[i].medium == undefined) {
-      medium.innerHTML = paintings[i].medium_fr;
-    } else {
-      medium.innerHTML = paintings[i].medium;
-    }
-    item.appendChild(medium);
+    // // Painting medium
+    // let medium = document.createElement("div");
+    // if (paintings[i].medium == undefined) {
+    //   medium.innerHTML = paintings[i].medium_fr;
+    // } else {
+    //   medium.innerHTML = paintings[i].medium;
+    // }
+    // item.appendChild(medium);
 
     // // Painting Status
     // let stat = document.createElement("div");

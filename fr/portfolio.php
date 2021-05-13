@@ -64,7 +64,7 @@
     <script type="text/javascript" src="../js/main.js"></script>
     <title>Monique Bergevin - Portfolio</title>
   </head>
-  <body>
+  <body style="background-color: #000">
 
     <!-- Navigation Menu -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light project-fontsize-md nav-border">
@@ -114,11 +114,11 @@
         </div>
       </div>
       <div class="col-10">
-        <h2 id="categoryTitle" class="project-font">
+        <h2 id="categoryTitle" class="project-font" style="color:#007bff">
           <?php echo $categoryTitle ?>
         </h2>
         <br>
-        <div id="gallery" class="justify-content-around">
+        <div id="gallery" class="justify-content-center">
           <?php
           if (!isset($result)) {
             echo 'SQL statement not prepared.';
