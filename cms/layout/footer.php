@@ -1,4 +1,3 @@
-
 <!-- Modal EDIT PAINTING -->
 <div class="modal fade" id="edit-painting-button" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -68,15 +67,15 @@
             </div>
             <div class="modal-body">
                 <form id="saveForm" name="saveForm" enctype="multipart/form-data" class="row g-3">
-                    <div class="col-8">
-                        <label for="title" class="form-label">Title<sup>*</sup></label>
-                        <input type="text" class="form-control" id="inputTitleNew" name="inputTitleNew" for="title" required>
-                    </div>
-                    <div class="col-4">
-                        <label for="dimensions" class="form-label">Dimensions<sup>*</sup></label>
-                        <input type="text" class="form-control" id="inputDimensionsNew" name="inputDimensionsNew" for="dimensions">
-                    </div>
                     <div class="col-6">
+                        <div class="col-md-12">
+                            <label for="title" class="form-label">Title<sup>*</sup></label>
+                            <input type="text" class="form-control" id="inputTitleNew" name="inputTitleNew" for="title" required>
+                        </div>
+                        <div class="col--md-12">
+                            <label for="dimensions" class="form-label">Dimensions<sup>*</sup></label>
+                            <input type="text" class="form-control" id="inputDimensionsNew" name="inputDimensionsNew" for="dimensions">
+                        </div>
                         <div class="col-md-12">
                             <label for="medium" class="form-label">Medium<sup>*</sup></label>
                             <input type="text" class="form-control" id="inputMediumNew" name="inputMediumNew" for="medium" required>
@@ -85,14 +84,17 @@
                             <label for="medium_fr" class="form-label">Medium (français)<sup>*</sup></label>
                             <input type="text" class="form-control" id="inputMediumFrNew" name="inputMediumFrNew" for="medium_fr" required>
                         </div>
-                    </div >
-                    <div class="col-6">
-                        <label for="status" class="form-label">Status<sup>*</sup></label>
-                        <select id="inputStatusNew" name="inputStatusNew" for="status" class="form-select" required>
-                            <option value="" selected>Choose...</option>
-                            <option value="1">Available</option>
-                            <option value="2">Unavailable</option>
-                        </select>
+                        <div class="col-md-12">
+                            <label for="status" class="form-label">Status<sup>*</sup></label>
+                            <select id="inputStatusNew" name="inputStatusNew" for="status" class="form-select" required>
+                                <option value="" selected>Choose...</option>
+                                <option value="1">Available</option>
+                                <option value="2">Unavailable</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6 text-bottom">
+                        <div id="thumbnailImageNew" class="thumbnail"></div>
                     </div>
                     <div class="col-md-12">
                         <label for="location" class="form-label">Location<sup>*</sup></label>

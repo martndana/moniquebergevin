@@ -16,11 +16,11 @@ $(document).ready(function () {
     /**
      * Handles the opening of the new painting modal form
      */
-    // let newModalButton = $('[action="new-painting"]');
+    let newModalButton = $('[action="new-painting"]');
     let newModalButtonClose = $('#new-painting-modal-close-button');
     let newModalButtonSave = $('#new-painting-modal-save-button');
 
-    // newModalButton.on('click', handleNewModalOpen);
+    newModalButton.on('click', handleNewModalOpen);
     newModalButtonClose.on('click', handleNewModalClose);
     newModalButtonSave.on('click', handleNewModalSave);
 
@@ -314,8 +314,36 @@ function handleChangeOnEditFormInput(event) {
  * NEW PAINTING SECTION
  ********************************************************************/
 
+function handleNewModalOpen() {
+
+    let imageElement = $('#inputLocationNew');
+    imageElement.on("input", selectedImageEvent);
+    // imageInput = document.querySelector('#inputLocationNew');
+    
+    // imageInput.addEventListener("change", selectedImageEvent());
+}
+
 function handleNewModalClose() {
     clearForm();
+}
+
+function selectedImageEvent(event) {
+    let form = document.querySelector('#new-painting-button form');
+    // sweep inputs
+    let inputs = form.querySelectorAll('input');
+    inputs.forEach((input) => {
+        if (input.getAttribute('id') == 'inputLocationNew' && input.value.trim() != '') {
+            const file = $('#inputLocationNew').prop('files')[0];
+            const reader = new FileReader;
+
+            reader.addEventListener("load", function () {
+                let newBackground = 'url("' + reader.result + '"';
+                $('#new-painting-button #thumbnailImageNew').css({'background-image': newBackground});
+            }, false);
+
+            reader.readAsDataURL(file);
+        }
+    });
 }
 
 function handleNewModalSave() {
