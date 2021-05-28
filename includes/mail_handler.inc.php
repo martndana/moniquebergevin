@@ -1,19 +1,55 @@
 <?php
-if(isset($_POST['submit'])){
-    $to = "bergevinm@mjbwebdesigns.ca"; // this is your Email address
-    $from = $_POST['txtEmail']; // this is the sender's Email address
-    $full_name = $_POST['txtFullName'];
-    $subject = $_POST['txtSubject'];
-    $subject2 = "Copy of your form submission";
-    $message = $full_name . " wrote the following:" . "\n\n" . $_POST['taMessage'];
-    $message2 = "Here is a copy of your message " . $full_name . "\n\n" . $_POST['taMessage'];
 
-    $headers = "From:" . $from;
-    $headers2 = "From:" . $to;
-    mail($to,$subject,$message,$headers);
-    mail($from,$subject2,$message2,$headers2); // sends a copy of the message to the sender
-    echo "Mail Sent. Thank you " . $full_name . ", we will contact you shortly.";
-    // You can also use header('Location: thank_you.php'); to redirect to another page.
-    // You cannot use header and echo together. It's one or the other.
+    // Constant
+    define(_SENDTO_, 'bergevinm@mjbwebdesigns.ca');
+
+    $result = [
+        'success' => true,
+        'error' => '',
+        'response' => null
+    ];
+
+    function setError($message) {
+        global $result;
+        $result['success'] = false;
+        $result['error'] = $message;
     }
-?>
+
+    if (
+        isset($_POST['fullName'])
+        && isset($_POST['email'])
+        && isset($_POST['subject'])
+        && isset($_POST['message'])
+    ) {
+        $fullName = filter_var($_POST['fullName'], FILTER_SANITIZE_STRING);
+        $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
+        $subject = filter_var($_POST['subject'], FILTER_SANITIZE_STRING);
+        $message = filter_var($_POST['message'], FILTER_SANITIZE_STRING);
+
+        $toEmail = "bergevinm@mjbwebdesigns.ca";
+        $emailSubject = "Website Email From " . $fullName;
+        $body = "<h2>" . $subject . "</h2>
+            <h4>Name</h4><p>" . $fullname . "</p>
+            <h4>Email</h4><p>" . $email . "</p>
+            <h4>Message</h4><p>" . $message . "</p>
+        ";
+
+        // $headers = "MIME-Version: 1.0" . "\r\n";
+        // $headers .= "Content-type: text/html; charset=UTF-8" . "\r\n";
+
+        // ini_set("SMTP","smtp.example.com" );
+        // ini_set('sendmail_from', 'user@example.com');
+
+        if(mail($toEmail, $emailSubject, $body, $headers)) {
+            $result['response'] = 'Your email was sent.  Thank you.';
+        } else {
+            setError('Problem sending your email.  Please try again later.');
+        }
+
+    } else {
+        setError('Problem on the input - ' . $_POST['fullName']);
+    }
+
+    //  Return result
+    header('Content-type: application/json');
+    echo json_encode($result);
