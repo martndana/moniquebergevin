@@ -63,7 +63,7 @@
           </div>
         </div>
         <div class="col-8">
-          <form id="contactForm" action="../includes/mail_handler.inc.php" method="post">
+          <form id="contactForm">
             <div class="form-group">
               <label for="txtName">Nom</label>
               <input type="text" class="form-control" name="txtFullName" id="txtName" placeholder="Name" required>
@@ -80,8 +80,9 @@
               <label for="taMessage">Message</label>
               <textarea class="form-control" id="taMessage" name="taMessage" rows="8" cols="80" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" name="submit">Envoyer</button>
+            <button type="button" id="sendBtn" class="btn btn-primary" name="submit">Envoyer</button>
           </form>
+          <div id="emailResult"></div>
         </div>
       </div>
     </div>
@@ -93,8 +94,10 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="./../js/jquery-3.6.0.min.js"></script>
+    <script src="./../js/jquery-ui.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="./../js/contact.js"></script> 
   </body>
 </html>
