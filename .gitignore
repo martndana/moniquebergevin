@@ -1,3 +1,4 @@
 #exclude files containing back end information
 includes/
 cms/database/
+database/
