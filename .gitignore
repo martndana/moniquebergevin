@@ -1,4 +1,3 @@
-includes/
-database/
-cms/database/
-cms/database/repository
+includes
+database
+cms/database
