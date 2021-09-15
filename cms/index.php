@@ -1,6 +1,11 @@
-<!-- Load Header -->
-<?php  
 
+<?php  
+    /* index.php
+     * Description: Landing page for Content Management System 
+     * Author: Martin Bergevin
+    */
+
+    // Load the header
     include_once('./layout/header.php');
 
     $userSession = new SessionUser();
