@@ -1,7 +1,10 @@
 <?php
 
+
+// Load the header
 include('./../../layout/header.php');
 
+// Establish database connection
 include_once('./../../database/database.php');
 $dbConn = new DbConnection();
 

@@ -7,9 +7,7 @@ $result = [
 ];
 
 // Validates the posted data
-if (
-        isset($_POST['paintingId'])
-    ) {
+if (isset($_POST['paintingId'])) {
 
     // sanitize input
     $paintingId = filter_var($_POST['paintingId'], FILTER_SANITIZE_NUMBER_INT);
@@ -20,6 +18,7 @@ if (
         // Opens the database
         include_once('../../database/database.php');
         $dbConn = new DbConnection();
+        
         // instantiante painting
         $painting = $dbConn->painting;
         $paintingData = $painting->getOne($paintingId);
